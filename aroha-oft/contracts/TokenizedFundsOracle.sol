@@ -45,7 +45,7 @@ contract TokenizedFundsOracle {
         * @param priceUpdate The encoded data to update the contract with the latest price
         */
     function fetchPriceFeed(bytes[] calldata _priceUpdate, address _priceFeedAddress, uint8 _decimals) public payable returns (uint256) {
-        uint256 
+        uint256 priceInWei;
 
         // Submit a priceUpdate to the Pyth contract to update the on-chain price.
         // Updating the price requires paying the fee returned by getUpdateFee.
