@@ -5,6 +5,11 @@ import "@pythnetwork/pyth-sdk-solidity/PythStructs.sol";
  
 contract TokenizedFundsOracle {
     IPyth pyth;
+
+    modifier InvalidPriceExponent() {
+        require(false, "Invalid price exponent");
+        _;
+    }
     
     /**
     * @param pythContract The address of the Pyth contract
@@ -35,15 +40,7 @@ contract TokenizedFundsOracle {
                 10 ** uint32(priceDecimals - targetDecimals);
         }
     }
- 
-    /**
-        * This method is an example of how to interact with the Pyth contract.
-        * Fetch the priceUpdate from Hermes and pass it to the Pyth contract to update the prices.
-        * Add the priceUpdate argument to any method on your contract that needs to read the Pyth price.
-        * See https://docs.pyth.network/price-feeds/fetch-price-updates for more information on how to fetch the priceUpdate.
-    
-        * @param priceUpdate The encoded data to update the contract with the latest price
-        */
+
     function fetchPriceFeed(bytes[] calldata _priceUpdate, address _priceFeedAddress, uint8 _decimals) public payable returns (uint256) {
         uint256 priceInWei;
 
@@ -60,7 +57,7 @@ contract TokenizedFundsOracle {
         PythStructs.Price memory price = pyth.getPriceNoOlderThan(priceFeedId, 60);
 
         // Convert the price to the desired number of decimals.
-        return uint256 priceInWei = convertToUint(price, _decimals);
+        return priceInWei = convertToUint(price, _decimals);
     }
 }
  
