@@ -11,5 +11,6 @@ export const stablecoins = {
     [lineaSepolia.id]: {
     },
     [hederaTestnet.id]: {
+        "USDC": "0.0.429274",
     },
 }
