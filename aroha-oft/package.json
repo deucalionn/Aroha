@@ -73,6 +73,7 @@
     "hardhat-deploy": "^0.12.1"
   },
   "dependencies": {
-    "@layerzerolabs/lz-evm-sdk-v2": "^3.0.15"
+    "@layerzerolabs/lz-evm-sdk-v2": "^3.0.15",
+    "@pythnetwork/pyth-sdk-solidity": "^4.0.0"
   }
 }
