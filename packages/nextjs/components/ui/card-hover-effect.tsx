@@ -14,19 +14,8 @@ import { useWeb3AuthConnectorInstance } from "@/hooks/useWeb3AuthConnectorInstan
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 
-export const HoverEffect = ({
-  items,
-  className,
-}: {
-  items: {
-    title: string;
-    description: string;
-    logo: string;
-    address: any;
-  }[];
-  className?: string;
-}) => {
-  let [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+export const HoverEffect = ({ items, className }: { items: any[]; className?: string }) => {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   const ActionButton = ({ children }: { children: React.ReactNode }) => (
     <ModalTrigger
