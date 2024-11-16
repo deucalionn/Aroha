@@ -74,6 +74,6 @@ export function SidebarComponent() {
           ))}
         </SidebarBody>
       </Sidebar>
-    </div>
+    </>
   );
 }
