@@ -1,12 +1,22 @@
+import { useEffect } from "react";
 import Image from "next/image";
 import MetamaskConnectButton from "./Buttons/MetamaskConnectButton";
 import SocialButton from "./Buttons/SocialButton";
 import Logo from "./assets/Logo-Aroha.svg";
+import { useAccount } from "wagmi";
 import { Web3AuthProvider } from "@/hooks/useWeb3AuthConnectorInstance";
 import DotPattern from "./ui/dot-pattern";
 import { cn } from "@/lib/utils";
 
 export const Login = () => {
+  const { isConnected } = useAccount();
+
+  useEffect(() => {
+    if (isConnected) {
+      window.location.href = "/invest";
+    }
+  }, [isConnected]);
+
   return (
     <div className="bg-black p-2 w-1/2 h-screen p-32">
       <Image src={Logo} width={250} height={250} alt="Logo" />
