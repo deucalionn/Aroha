@@ -1,3 +1,4 @@
+import { useAccountEffect } from "wagmi";
 import { Footer } from "@/components/Footer";
 import { SidebarComponent } from "@/components/SidebarComponent";
 import { Providers } from "@/components/web3auth/provider/providers";
@@ -10,8 +11,7 @@ const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
         <Providers>
           <div className="flex flex-col h-screen">
             <div className="flex flex-1">
-              <SidebarComponent />
-              <main className="flex-1 p-6 bg-gradient-to-l from-gray-900 to-black">{children}</main>
+              <main className="flex-1 bg-gradient-to-l from-gray-900 to-black">{children}</main>
             </div>
             <Footer />
           </div>
