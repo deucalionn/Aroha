@@ -8,11 +8,11 @@ import { switchChain } from "@wagmi/core";
 import { motion } from "framer-motion";
 import { polygonAmoy } from "viem/chains";
 import { useConfig, useDisconnect } from "wagmi";
+import { useAccount } from "wagmi";
 import ArohaLogo from "@/app/assets/ArohaLogo.svg";
 import ChainSelector from "@/app/invest/components/ChainSelector";
 import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/sidebar";
 import { useWeb3AuthConnectorInstance } from "@/hooks/useWeb3AuthConnectorInstance";
-import { useAccount } from "wagmi";
 
 export function SidebarComponent() {
   const router = useRouter();
@@ -40,12 +40,12 @@ export function SidebarComponent() {
     {
       label: "Dashboard",
       icon: <IconBrandTabler className="text-wheat h-7 w-7 flex-shrink-0" />,
-      onClick: () => router.push("/"),
+      onClick: () => router.push("/dashboard"),
     },
     {
       label: "Invest",
       icon: <IconUserBolt className="text-wheat h-7 w-7 flex-shrink-0" />,
-      onClick: () => router.push("/"),
+      onClick: () => router.push("/invest"),
     },
     {
       label: "Portfolio",
@@ -58,11 +58,11 @@ export function SidebarComponent() {
       onClick: () => logout(),
     },
   ];
-    const [sidebarOpen, setSidebarOpen] = useState(false);
-    // const { isConnected } = useAccount()
-    // if (!isConnected) {
-    //     return null;
-    // }
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  // const { isConnected } = useAccount()
+  // if (!isConnected) {
+  //     return null;
+  // }
   return (
     <>
       <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} animate>
