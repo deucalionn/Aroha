@@ -1,21 +1,27 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import contractAbi from "@/lib/contractAbi.json";
 import { EvmPriceServiceConnection } from "@pythnetwork/pyth-evm-js";
 import { motion } from "framer-motion";
 import { ArrowRight, Loader2, Wallet } from "lucide-react";
-import { parseUnits } from "viem";
-import { useChainId, useSwitchChain, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
+import { erc20Abi, parseUnits } from "viem";
+import { useChainId, useReadContract, useSwitchChain, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { unichainSepolia } from "wagmi/chains";
+
 
 const BuyForm = ({ data }: any) => {
   const [isLoading, setIsLoading] = useState(false);
   const [amount, setAmount] = useState("");
   const [error, setError] = useState("");
   const [isWrongNetwork, setIsWrongNetwork] = useState(false);
+  const [needsApproval, setNeedsApproval] = useState(false);
 
   const chainId = useChainId();
   const { switchChain } = useSwitchChain();
+
+  const USDC_ADDRESS = "0xdcCD58bd9D8Cd4486514bd8488fc49AcD4e136d7" as const; 
+  const CONTRACT_ADDRESS = "0x763D95d1F6471f1E99024D704005750FB0fCa0c0" as const;
 
   const tokenData = {
     name: "ISO Token",
@@ -25,19 +31,47 @@ const BuyForm = ({ data }: any) => {
     maxPurchase: "10000",
   };
 
-  useEffect(() => {
-    setIsWrongNetwork(chainId !== unichainSepolia.id);
-  }, [chainId]);
+  const { writeContract: writeApproval, data: approvalHash } = useWriteContract();
+  const { writeContract: writeBuy, data: buyHash, error: writeError } = useWriteContract();
 
-  const { writeContract, data: hash, error: writeError } = useWriteContract();
+  const { isLoading: isApprovalPending, isSuccess: isApprovalSuccess } = useWaitForTransactionReceipt({
+    hash: approvalHash,
+  });
 
   const {
     isLoading: isTransactionPending,
     isSuccess: isTransactionSuccess,
     error: transactionError,
   } = useWaitForTransactionReceipt({
-    hash,
+    hash: buyHash,
   });
+
+ 
+  const { data: currentAllowance } = useReadContract({
+    address: USDC_ADDRESS,
+    abi: erc20Abi,
+    functionName: "allowance",
+    args: [data.address, CONTRACT_ADDRESS],
+  });
+
+
+  useEffect(() => {
+    if (amount && currentAllowance !== undefined) {
+      try {
+        const amountInUSD = parseUnits(amount, 6);
+        // Convert currentAllowance to BigInt if it isn't already
+        const allowanceBigInt = BigInt(currentAllowance?.toString() || "0");
+        setNeedsApproval(amountInUSD > allowanceBigInt);
+      } catch (error) {
+        console.error("Error checking allowance:", error);
+        setNeedsApproval(true); // Default to requiring approval if there's an error
+      }
+    }
+  }, [amount, currentAllowance]);
+
+  useEffect(() => {
+    setIsWrongNetwork(chainId !== unichainSepolia.id);
+  }, [chainId]);
 
   useEffect(() => {
     if (isTransactionSuccess) {
@@ -45,6 +79,13 @@ const BuyForm = ({ data }: any) => {
       setAmount("");
     }
   }, [isTransactionSuccess]);
+
+  useEffect(() => {
+    if (isApprovalSuccess) {
+    
+      handleBuy(true);
+    }
+  }, [isApprovalSuccess]);
 
   useEffect(() => {
     if (writeError || transactionError) {
@@ -73,10 +114,34 @@ const BuyForm = ({ data }: any) => {
     }
   };
 
-  const handleBuy = async () => {
+  const handleApprove = async () => {
+    try {
+      setIsLoading(true);
+      setError("");
+
+      const amountInUSD = parseUnits(amount, 6);
+
+      writeApproval({
+        address: USDC_ADDRESS,
+        abi: erc20Abi,
+        functionName: "approve",
+        args: [CONTRACT_ADDRESS, amountInUSD],
+      });
+    } catch (error: any) {
+      setError(error.message);
+      setIsLoading(false);
+    }
+  };
+
+  const handleBuy = async (skipApprovalCheck = false) => {
     try {
       if (isWrongNetwork) {
         await handleNetworkSwitch();
+        return;
+      }
+
+      if (!skipApprovalCheck && needsApproval) {
+        await handleApprove();
         return;
       }
 
@@ -86,22 +151,9 @@ const BuyForm = ({ data }: any) => {
       const amountInUSD = parseUnits(amount, 6);
       const priceUpdates = await getPythPriceData();
 
-      writeContract({
-        address: "0xd9fbde12bac5681b8b9a92810c3f3a48286a916e",
-        abi: [
-          {
-            type: "function",
-            name: "buy",
-            inputs: [
-              { name: "token", type: "address", internalType: "address" },
-              { name: "amountToBuyInUSD", type: "uint256", internalType: "uint256" },
-              { name: "shouldCreateLP", type: "bool", internalType: "bool" },
-              { name: "priceUpdates", type: "bytes[]", internalType: "bytes[]" },
-            ],
-            outputs: [],
-            stateMutability: "payable",
-          },
-        ],
+      writeBuy({
+        address: CONTRACT_ADDRESS,
+        abi: contractAbi,
         functionName: "buy",
         args: [data.address, amountInUSD, false, priceUpdates],
         value: BigInt(50000000),
@@ -110,6 +162,27 @@ const BuyForm = ({ data }: any) => {
       setError(error.message);
       setIsLoading(false);
     }
+  };
+
+  const getButtonText = () => {
+    if (isLoading || isTransactionPending || isApprovalPending) {
+      return (
+        <>
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          {isTransactionPending ? "Confirming Buy..." : isApprovalPending ? "Confirming Approval..." : "Processing..."}
+        </>
+      );
+    }
+
+    if (isWrongNetwork) return "Switch to Unichain";
+    if (needsApproval) return "Approve USDC";
+
+    return (
+      <>
+        Buy {data.description}
+        <ArrowRight className="ml-2 h-4 w-4" />
+      </>
+    );
   };
 
   return (
@@ -126,16 +199,14 @@ const BuyForm = ({ data }: any) => {
           </h2>
           <div className="flex items-center justify-center gap-2 text-wheat/60">
             <Wallet className="w-4 h-4" />
-            <span>
-              Your Balance: {tokenData.userBalance} {data.description}
-            </span>
+            <span>Your Balance: {tokenData.userBalance} USDC</span>
           </div>
         </div>
 
         <div className="space-y-4">
           <div className="flex justify-between text-sm text-wheat/80">
             <span>Amount to Purchase</span>
-            <span>Price: {tokenData.price} ETH per token</span>
+            <span>Price: {tokenData.price} USDC per token</span>
           </div>
 
           <div className="relative">
@@ -146,34 +217,22 @@ const BuyForm = ({ data }: any) => {
               onChange={e => setAmount(e.target.value)}
               className="w-full bg-black/30 border-gray-800 rounded-xl pr-16 text-wheat placeholder:text-wheat/40 focus:ring-wheat/20"
             />
-            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-wheat/60">{data.description}</span>
+            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-wheat/60">USDC</span>
           </div>
 
           <div className="flex justify-between text-sm text-wheat/60">
             <span>Max: {tokenData.maxPurchase}</span>
-            <span>Total: {amount ? (Number(amount) * Number(tokenData.price)).toFixed(4) : "0"} ETH</span>
+            <span>Total: {amount ? (Number(amount) * Number(tokenData.price)).toFixed(4) : "0"} USDC</span>
           </div>
 
           {error && <div className="text-red-500 text-sm text-center">{error}</div>}
 
           <Button
             className="w-full bg-wheat/10 hover:bg-wheat/20 text-wheat border border-wheat/20 rounded-xl h-12 transition-all duration-200 shadow-lg shadow-wheat/5"
-            onClick={handleBuy}
-            disabled={isLoading || isTransactionPending || !amount}
+            onClick={() => handleBuy(false)}
+            disabled={isLoading || isTransactionPending || isApprovalPending || !amount}
           >
-            {isLoading || isTransactionPending ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                {isTransactionPending ? "Confirming..." : "Processing..."}
-              </>
-            ) : isWrongNetwork ? (
-              "Switch to Unichain"
-            ) : (
-              <>
-                Buy {tokenData.symbol}
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </>
-            )}
+            {getButtonText()}
           </Button>
         </div>
       </div>

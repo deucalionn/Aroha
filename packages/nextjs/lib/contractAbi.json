@@ -1,4 +1,5 @@
-  [{
+[
+  {
     "type": "constructor",
     "inputs": [
       {
@@ -421,6 +422,24 @@
         "name": "_delegate",
         "type": "address",
         "internalType": "address"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "setDestinationChainEids",
+    "inputs": [
+      {
+        "name": "token",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "eid",
+        "type": "uint32",
+        "internalType": "uint32"
       }
     ],
     "outputs": [],
