@@ -1,14 +1,12 @@
-import { useAccountEffect } from "wagmi";
 import { Footer } from "@/components/Footer";
 import { SidebarComponent } from "@/components/SidebarComponent";
 import { Navbar } from "@/components/ui/navbar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { Providers } from "@/components/web3auth/provider/providers";
 import "@/styles/globals.css";
-
+import { useAccountEffect } from "wagmi";
 
 const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
-
   return (
     <html suppressHydrationWarning>
       <body>
