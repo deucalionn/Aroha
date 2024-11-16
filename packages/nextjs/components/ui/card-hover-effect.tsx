@@ -20,7 +20,8 @@ export const HoverEffect = ({
   items: {
     title: string;
     description: string;
-    logo: string;
+        logo: string;
+        address: any;
   }[];
   className?: string;
 }) => {
@@ -77,7 +78,7 @@ export const HoverEffect = ({
                   "absolute pointer-events-none bg-opacity-20",
                 )}
               />
-              <BuyForm />
+                      <BuyForm data={item} />
             </ModalContent>
           </ModalBody>
         </Modal>
