@@ -1,6 +1,7 @@
 import React from "react";
-import { chains } from "../constants";
 import { HoverEffect } from "@/components/ui/card-hover-effect";
+import { tokenList } from "@/app/dashboard/data/tokenList";
+import { chains } from "../constants";
 
 const InvestWrapper = () => {
   return (

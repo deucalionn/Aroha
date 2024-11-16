@@ -8,6 +8,8 @@ import { CardSpotlight } from "./card-spotlight";
 import BuyForm from "@/app/invest/components/BuyForm";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
+import { Token } from "@/app/dashboard/data/tokenList";
+import { useWeb3AuthConnectorInstance } from "@/hooks/useWeb3AuthConnectorInstance";
 import ShinyButton from "./shiny-button";
 import { Button } from "./button";
 

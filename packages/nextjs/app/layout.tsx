@@ -1,4 +1,4 @@
-
+import { useAccountEffect } from "wagmi";
 import { Footer } from "@/components/Footer";
 import { SidebarComponent } from "@/components/SidebarComponent";
 import { Navbar } from "@/components/ui/navbar";
