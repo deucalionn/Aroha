@@ -6,16 +6,13 @@ import Link from "next/link";
 import { CardFooter } from "./card";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
+import { Token } from "@/app/dashboard/data/tokenList";
 
 export const HoverEffect = ({
   items,
   className,
 }: {
-  items: {
-    title: string;
-    description: string;
-    link: string;
-  }[];
+  items: Token[];
   className?: string;
 }) => {
   let [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -23,10 +20,8 @@ export const HoverEffect = ({
   return (
     <div className={cn("grid grid-cols-1 md:grid-cols-2  lg:grid-cols-3  py-10", className)}>
       {items.map((item, idx) => (
-        <Link
-          href={item?.link}
-          key={item?.link}
-          className="relative group  block p-2 h-full w-full"
+        <div
+          className="group relative group  block p-2 h-full w-full cursor-pointer"
           onMouseEnter={() => setHoveredIndex(idx)}
           onMouseLeave={() => setHoveredIndex(null)}
         >
@@ -51,19 +46,19 @@ export const HoverEffect = ({
             <div>
               {" "}
               <Image
-                src={"https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png"}
+                src={item.logo_url}
                 alt="logo"
                 width={50}
                 height={50}
                 className=" ml-[30%]"
               />
-              <CardTitle>{item.title}</CardTitle>
-              <CardDescription>{item.description}</CardDescription>
+              <CardTitle>{item.name}</CardTitle>
+              <CardDescription>{item.symbol}</CardDescription>
             </div>
 
-            <div className=" w-full border-t pt-4 border-wheat">abc</div>
+            <div className=" w-full border-t pt-4 border-wheat group-hover:text-green-400 group-hover:font-bold">BUY</div>
           </Card>
-        </Link>
+        </div>
       ))}
     </div>
   );
