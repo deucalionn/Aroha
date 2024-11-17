@@ -4,9 +4,9 @@ import React, { useState } from "react";
 import Image from "next/image";
 import EmptyPortfolioState from "./components/EmptyPortfolioState";
 import { PortofolioItem, portfolioItems } from "./data/userBalance";
-import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 type ChartData = {
   date: string;
@@ -111,7 +111,8 @@ const PortfolioDashboard = () => {
   const yAxisTicks = getYAxisTicks(chartData);
 
   return (
-    <div className="w-full space-y-6 p-4 bg-black text-white">
+      <div className="w-full space-y-6 p-4  text-white">
+          <h1 className="text-[24px] font-bold text-wheat">Dashboard</h1>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <Card className="col-span-2 bg-gray-900 border-gray-800">
           <CardHeader className="flex flex-row justify-between items-center">
@@ -182,15 +183,15 @@ const PortfolioDashboard = () => {
           <CardContent>
             <div className="space-y-4">
               <div>
-                <p className="text-gray-400">Plus-value - Année en cours</p>
+                <p className="text-gray-400">Added Value - Current Year</p>
                 <div className="flex items-center gap-2">
                   <span className="text-2xl font-bold text-emerald-400">+{yearGain} €</span>
                   <span className="text-emerald-400">+{yearGainPercent}%</span>
                 </div>
               </div>
               <p className="text-sm text-gray-400">
-                La plus-value latente est la différence entre votre prix d'achat unitaire et le prix actuel à un instant
-                donné. Ce montant ne tient pas compte des plus-values réalisées.
+                The unrealized capital gain is the difference between your unit purchase price and the current price at
+                a given moment. This amount does not take into account realized gains.
               </p>
             </div>
           </CardContent>

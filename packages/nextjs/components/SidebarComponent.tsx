@@ -3,16 +3,16 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import ArohaLogo from "@/app/assets/ArohaLogo.svg";
+import ChainSelector from "@/app/marketplace/components/ChainSelector";
+import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/sidebar";
+import { useWeb3AuthConnectorInstance } from "@/hooks/useWeb3AuthConnectorInstance";
 import { IconArrowLeft, IconBrandTabler, IconSettings, IconUserBolt } from "@tabler/icons-react";
 import { switchChain } from "@wagmi/core";
 import { motion } from "framer-motion";
 import { polygonAmoy } from "viem/chains";
 import { useConfig, useDisconnect } from "wagmi";
 import { useAccount } from "wagmi";
-import ArohaLogo from "@/app/assets/ArohaLogo.svg";
-import ChainSelector from "@/app/invest/components/ChainSelector";
-import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/sidebar";
-import { useWeb3AuthConnectorInstance } from "@/hooks/useWeb3AuthConnectorInstance";
 
 export function SidebarComponent() {
   const router = useRouter();
@@ -43,15 +43,11 @@ export function SidebarComponent() {
       onClick: () => router.push("/dashboard"),
     },
     {
-      label: "Invest",
+      label: "Marketplace",
       icon: <IconUserBolt className="text-wheat h-7 w-7 flex-shrink-0" />,
-      onClick: () => router.push("/invest"),
+      onClick: () => router.push("/marketplace"),
     },
-    {
-      label: "Portfolio",
-      icon: <IconSettings className="text-wheat h-6 w-6 flex-shrink-0" />,
-      onClick: () => router.push("/"),
-    },
+
     {
       label: "Logout",
       icon: <IconArrowLeft className="text-wheat h-6 w-6 flex-shrink-0" />,
@@ -72,7 +68,7 @@ export function SidebarComponent() {
             <SidebarLink
               key={index}
               link={link}
-              className="hover:bg-gray-800 transition-colors  pl-2 pr-7 py-2 rounded-lg"
+              className="hover:bg-gray-800 transition-colors  mr-10 py-2 rounded-lg"
             />
           ))}
         </div>

@@ -1,30 +1,21 @@
-"use client"
+"use client";
+
 import { useState } from "react";
 import Image from "next/image";
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalTrigger } from "./animated-modal";
 import { AnimatedGridPattern } from "./animatedGridPattern";
+import { Button } from "./button";
 import { CardFooter } from "./card";
 import { CardSpotlight } from "./card-spotlight";
-import BuyForm from "@/app/invest/components/BuyForm";
+import ShinyButton from "./shiny-button";
+import { Token } from "@/app/dashboard/data/tokenList";
+import BuyForm from "@/app/marketplace/components/BuyForm";
+import { useWeb3AuthConnectorInstance } from "@/hooks/useWeb3AuthConnectorInstance";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
-import { Token } from "@/app/dashboard/data/tokenList";
-import { useWeb3AuthConnectorInstance } from "@/hooks/useWeb3AuthConnectorInstance";
-import ShinyButton from "./shiny-button";
-import { Button } from "./button";
 
-export const HoverEffect = ({
-  items,
-  className,
-}: {
-  items: {
-    title: string;
-    description: string;
-    logo: string;
-  }[];
-  className?: string;
-}) => {
-  let [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+export const HoverEffect = ({ items, className }: { items: any[]; className?: string }) => {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   const ActionButton = ({ children }: { children: React.ReactNode }) => (
     <ModalTrigger
@@ -33,8 +24,8 @@ export const HoverEffect = ({
       text-white dark:text-white/90 flex-1 text-center"
     >
       {children}
-      </ModalTrigger>
-);
+    </ModalTrigger>
+  );
 
   return (
     <div className={cn("lg:w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 flex-wrap gap-10 py-3", className)}>
@@ -56,9 +47,9 @@ export const HoverEffect = ({
 
               <div className="w-full border-t border-wheat/30 pt-4 mt-4 px-4 z-10">
                 <div className=" w-full flex flex-col gap-2 justify-between">
-                  <ActionButton >Buy</ActionButton>
-                  <ActionButton >Buy & Lend</ActionButton>
-                  <ActionButton >Buy & LP</ActionButton>
+                  <ActionButton>Buy</ActionButton>
+                  <ActionButton>Buy & Lend</ActionButton>
+                  <ActionButton>Buy & LP</ActionButton>
                 </div>
               </div>
             </CardSpotlight>
@@ -77,7 +68,7 @@ export const HoverEffect = ({
                   "absolute pointer-events-none bg-opacity-20",
                 )}
               />
-              <BuyForm />
+              <BuyForm data={item} />
             </ModalContent>
           </ModalBody>
         </Modal>

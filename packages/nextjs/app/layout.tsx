@@ -1,10 +1,10 @@
-import { useAccountEffect } from "wagmi";
 import { Footer } from "@/components/Footer";
 import { SidebarComponent } from "@/components/SidebarComponent";
 import { Navbar } from "@/components/ui/navbar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { Providers } from "@/components/web3auth/provider/providers";
 import "@/styles/globals.css";
+import { useAccountEffect } from "wagmi";
 
 const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -15,7 +15,8 @@ const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
             <div className="flex flex-col min-h-screen">
               <Navbar />
               <div className="flex flex-1 overflow-hidden">
-                <main className="flex-1 overflow-y-auto bg-gradient-to-l from-gray-900 to-black">{children}</main>
+                <SidebarComponent />
+                <main className="flex-1 overflow-y-auto p-6 bg-gradient-to-l from-gray-900 to-black">{children}</main>
               </div>
               <Footer />
             </div>

@@ -37,9 +37,9 @@ export const Providers = ({ children }: ProvidersProps) => {
 
     const config = createConfig({
       chains: [
-        unichainSepolia,
         sepolia,
         polygonAmoy,
+        unichainSepolia,
         rootstockTestnet,
         lineaSepolia,
         hederaTestnet,
@@ -47,9 +47,9 @@ export const Providers = ({ children }: ProvidersProps) => {
         scrollSepolia,
       ],
       transports: {
-        [unichainSepolia.id]: http(),
         [sepolia.id]: http(),
         [polygonAmoy.id]: http(),
+        [unichainSepolia.id]: http(),
         [rootstockTestnet.id]: http(),
         [lineaSepolia.id]: http(),
         [hederaTestnet.id]: http(),
@@ -63,7 +63,15 @@ export const Providers = ({ children }: ProvidersProps) => {
   }, []);
 
   if (!wagmiConfig) {
-    return <div>Loading...</div>;
+    return <div className="flex-col gap-4 w-full flex items-center justify-center mt-[40%]">
+  <div
+    className="w-20 h-20 border-4 border-transparent text-blue-400 text-4xl animate-spin flex items-center justify-center border-t-blue-400 rounded-full"
+  >
+    <div
+      className="w-16 h-16 border-4 border-transparent text-wheat text-2xl animate-spin flex items-center justify-center border-t-red-400 rounded-full"
+    ></div>
+  </div>
+</div>;
   }
 
   return (
