@@ -24,16 +24,16 @@ export const Login = () => {
       <Image src={Logo} width={250} height={250} alt="Logo" className="mx-auto" />
 
       <div className="flex flex-col justify-center h-full -mt-10">
-        <div className="flex flex-col">
-          <p className="text-3xl mx-auto">Login in to your account</p>
-        </div>
 
-        <div className="flex flex-col gap-4 mt-2 w-1/2 mx-auto">
+          <p className=" text-xl md:text-3xl md:mx-auto text-nowrap text-start -ml-20">Login in to your account</p>
+
+
+        <div className="flex flex-col gap-4 mt-2 w-[250px] md:w-1/2 md:mx-auto -ml-24">
           <SocialButton provider={Web3AuthProvider.GOOGLE} />
           <SocialButton provider={Web3AuthProvider.APPLE} />
           <MetamaskConnectButton />
           <DotPattern
-            className={cn("  [mask-image:radial-gradient(500px_circle_at_center,white,transparent)]")}
+            className={cn(" [mask-image:radial-gradient(200px_circle_at_center,white,transparent)] lg:[mask-image:radial-gradient(500px_circle_at_center,white,transparent)]")}
           />
           {/* <button onClick={() => disconnect()}>Disconnect</button> */}
         </div>

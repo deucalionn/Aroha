@@ -21,10 +21,10 @@ const ChainSelector = ({ options, onSelect, currentChainId }: DropdownSelectorPr
   };
 
   return (
-    <div className="relative inline-block text-left">
-      <button onClick={toggleMenu} className="text-wheat py-2 rounded-md text-xs font-medium">
+    <div className="relative inline-block text-left -ml-2">
+      <button onClick={toggleMenu} className="text-wheat py-2 rounded-md text-[11px] font-medium">
         {chainMappingId[currentChainId]}
-        <span className="ml-2">▼</span>
+        <span className="">▼</span>
       </button>
 
       {isOpen && (

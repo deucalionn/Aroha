@@ -9,7 +9,6 @@ import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/sidebar";
 import { useWeb3AuthConnectorInstance } from "@/hooks/useWeb3AuthConnectorInstance";
 import { IconArrowLeft, IconBrandTabler, IconSettings, IconUserBolt } from "@tabler/icons-react";
 import { switchChain } from "@wagmi/core";
-import { motion } from "framer-motion";
 import { polygonAmoy } from "viem/chains";
 import { useConfig, useDisconnect } from "wagmi";
 import { useAccount } from "wagmi";
@@ -62,7 +61,7 @@ export function SidebarComponent() {
   return (
     <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} animate>
       <SidebarBody className="bg-gray-900 h-screen border-r border-gray-800 flex flex-col gap-6 py-6">
-        {/* <ChainSelector options={allChains} onSelect={switchToAnotherChain} currentChainId={config.state.chainId} /> */}
+        <ChainSelector options={allChains} onSelect={switchToAnotherChain} currentChainId={config.state.chainId} />
         <div className="flex flex-col gap-2">
           {links.map((link, index) => (
             <SidebarLink
