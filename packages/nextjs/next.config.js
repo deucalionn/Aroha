@@ -14,6 +14,7 @@ const nextConfig = {
   },
   transpilePackages: ["@uniswap/widgets", "@uniswap/conedison"],
   webpack: config => {
+    config.optimization.minimize = false;
     config.resolve.fallback = { fs: false, net: false, tls: false };
     config.externals.push("pino-pretty", "lokijs", "encoding");
     return config;
